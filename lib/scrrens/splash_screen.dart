@@ -20,20 +20,19 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> handleLogin() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? userPhoneNumber = prefs.getString(AppSettings.phoneNumberSharedPrefsKey);
+    final String? userPhoneNumber = prefs.getString(AppSettings.emailSharedPrefsKey);
     if (userPhoneNumber == null) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => SignInPage()),
+        MaterialPageRoute(builder: (context) => const SignInPage()),
       );
     } else {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => WelcomPage()),
+        MaterialPageRoute(builder: (context) => const HomePage()),
       );
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -44,3 +43,13 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }

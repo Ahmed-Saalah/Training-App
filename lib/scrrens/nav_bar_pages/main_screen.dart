@@ -1,37 +1,56 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/models/products_model.dart';
+import 'package:flutter_application_1/service/product_service.dart';
 import 'package:flutter_application_1/widgets/item_card_widget.dart';
 import '../ProductDetailsScreen.dart';
-
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+  const MainScreen({Key? key}) : super(key: key);
 
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
-  List<String> productNames = [
-    "Dell",
-    "Lenovo",
-    "HP",
-  ];
+  bool isLoading = true;
+  List<Product> productList = [];
+
+  Future<void> getData() async {
+    productList = await ProductsService.getProductsData();
+    isLoading = false;
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: productNames.length,
-      itemBuilder: (BuildContext context, int index) {
-        return InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ProductDetailsScreen(
-                          productName: productNames[index],
-                        )),
-              );
+    return isLoading
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
+        : ListView.builder(
+            itemCount: productList.length,
+            itemBuilder: (BuildContext context, int index) {
+              return InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ProductDetailsScreen(
+                                product: productList[index],
+                              )),
+                    );
+                  },
+                  child: ItemCard(
+                    productName: productList[index].title ?? "--",
+                    price: "${productList[index].price}",
+                    thumbnail: productList[index].thumbnail ?? "",
+                  ));
             },
-            child: ItemCard(productName: productNames[index]));
-      },
-    );
+          );
   }
 }

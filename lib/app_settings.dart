@@ -1,4 +1,4 @@
-class AppSettings
+class AppSettings 
 {
-    static String phoneNumberSharedPrefsKey = "user_phone_number";
+  static const String emailSharedPrefsKey = "user_email";
 }
